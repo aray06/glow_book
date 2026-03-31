@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+
+class Salon extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'name', 'description', 'address', 'phone', 'image', 'owner_id',
+    ];
+
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    public function specialists(): HasMany
+    {
+        return $this->hasMany(Specialist::class);
+    }
+
+    public function services(): HasMany
+    {
+        return $this->hasMany(Service::class);
+    }
+
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
+    public function averageRating(): float
+    {
+        $avg = $this->specialists()->avg('rating');
+        return $avg ? round($avg, 1) : 0;
+    }
+}
