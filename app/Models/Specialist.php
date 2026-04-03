@@ -35,9 +35,25 @@ class Specialist extends Model
     public function appointments(): HasMany { return $this->hasMany(Appointment::class); }
     public function reviews(): HasMany { return $this->hasMany(Review::class); }
 
+    /**
+     * Обновляем рейтинг специалиста по его отзывам
+     */
     public function updateRating(): void
     {
         $this->rating = $this->reviews()->avg('rating') ?? 0;
         $this->save();
+    }
+
+    /**
+     * Получаем топ N специалистов по рейтингу (по умолчанию 3)
+     */
+    public static function topThree(): \Illuminate\Database\Eloquent\Collection
+    {
+        // Обновляем рейтинг всех специалистов перед выборкой
+        self::all()->each->updateRating();
+
+        return self::orderByDesc('rating')
+                   ->take(3)
+                   ->get();
     }
 }

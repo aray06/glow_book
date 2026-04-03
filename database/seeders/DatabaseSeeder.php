@@ -193,5 +193,8 @@ class DatabaseSeeder extends Seeder
         Review::create(['client_id' => $clientUser4->id, 'specialist_id' => $spec1->id, 'appointment_id' => $appointments[4]->id, 'rating' => 4, 'comment' => 'Замечательный педикюр, очень аккуратно. Will come again!']);
         Review::create(['client_id' => $clientUser2->id, 'specialist_id' => $spec5->id, 'appointment_id' => $appointments[6]->id, 'rating' => 5, 'comment' => 'Best keratin treatment ever! Аружан is amazing.']);
         Review::create(['client_id' => $clientUser1->id, 'specialist_id' => $spec6->id, 'appointment_id' => $appointments[9]->id, 'rating' => 5, 'comment' => 'Wonderful facial! My skin feels incredible. Highly recommend Томирис.']);
-    }
+            Specialist::all()->each(fn($s) => $s->updateRating());
+        }
+
+
 }
